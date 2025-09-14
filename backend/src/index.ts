@@ -3,21 +3,19 @@ import {
   RequestMethod,
   type Route,
 } from "@imforked/legos/server";
-// import { validateSignUp } from "./utils/validateSignUp.js";
+import { validateSignUp } from "./utils/validateSignUp.js";
 
 const routes: Route[] = [
   {
     path: "/",
     method: RequestMethod.POST,
     requestHandler: (req, res, next) => {
-      // validateSignUp(req, res, (err?: any) => {
-      //   if (err) return next(err);
+      validateSignUp(req, res, (err?: any) => {
+        if (err) return next(err);
 
-      //   console.log("📩 Received body:", req.body);
-      //   res.json({ youSent: req.body });
-      // });
-      console.log("📩 Received body:", req.body);
-      res.json({ youSent: req.body });
+        console.log("📩 Received body:", req.body);
+        res.json({ youSent: req.body });
+      });
     },
   },
 ];

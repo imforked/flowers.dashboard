@@ -24,7 +24,6 @@ const routes: Route[] = [
 const app = createServer({
   // TODO: add CORS options
   routes,
-  // middleware: [validateSignUp],
   onError: (err) => {
     console.error("Custom error handler:", err);
     return { status: 500, body: { error: "Something went wrong." } };

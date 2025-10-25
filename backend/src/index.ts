@@ -1,57 +1,5 @@
-import {
-  createServer,
-  RequestMethod,
-  verifyRecaptcha,
-  ExpectedAction,
-  type Route,
-} from "@imforked/legos/server";
-import { validateSignUp } from "./utils/validateSignUp.js";
-import { PrismaClient } from "./generated/prisma/index.js";
-import bcrypt from "bcrypt";
-
-const prisma = new PrismaClient();
-
-const routes: Route[] = [
-  {
-    path: "/signup",
-    method: RequestMethod.POST,
-    requestHandler: async (req, res, next) => {
-      try {
-        // Validate form fields
-        validateSignUp(req, res, (err?: any) => {
-          if (err) return next(err);
-        });
-
-        // Verify reCAPTCHA
-        const { recaptchaToken, firstName, lastName, email, password } =
-          req.body;
-
-        const recaptchaOk = await verifyRecaptcha({
-          projectID: process.env.GCP_PROJECT_ID!,
-          recaptchaKey: process.env.RECAPTCHA_SITE_KEY!,
-          token: recaptchaToken,
-          expectedAction: ExpectedAction.SignUp,
-        });
-
-        if (!recaptchaOk) {
-          return res.status(400).json({ error: "Invalid reCAPTCHA token" });
-        }
-
-        const saltRounds = 10;
-        const passwordHash = await bcrypt.hash(password, saltRounds);
-
-        // Create user in the database
-        const user = await prisma.user.create({
-          data: { firstName, lastName, email, passwordHash },
-        });
-
-        res.json({ user });
-      } catch (err) {
-        next(err);
-      }
-    },
-  },
-];
+import { createServer } from "@imforked/legos/server";
+import { routes } from "./routes.js";
 
 // Create and configure the server
 const app = createServer({

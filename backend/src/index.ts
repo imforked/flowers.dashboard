@@ -7,6 +7,7 @@ import {
 } from "@imforked/legos/server";
 import { validateSignUp } from "./utils/validateSignUp.js";
 import { PrismaClient } from "./generated/prisma/index.js";
+import bcrypt from "bcrypt";
 
 const prisma = new PrismaClient();
 
@@ -36,9 +37,12 @@ const routes: Route[] = [
           return res.status(400).json({ error: "Invalid reCAPTCHA token" });
         }
 
-        // Create user in the database (Prisma example)
+        const saltRounds = 10;
+        const passwordHash = await bcrypt.hash(password, saltRounds);
+
+        // Create user in the database
         const user = await prisma.user.create({
-          data: { firstName, lastName, email, passwordHash: password },
+          data: { firstName, lastName, email, passwordHash },
         });
 
         res.json({ user });

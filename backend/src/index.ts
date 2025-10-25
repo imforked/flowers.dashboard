@@ -1,21 +1,50 @@
 import {
   createServer,
   RequestMethod,
+  verifyRecaptcha,
+  ExpectedAction,
   type Route,
 } from "@imforked/legos/server";
 import { validateSignUp } from "./utils/validateSignUp.js";
+import { PrismaClient } from "./generated/prisma/index.js";
+
+const prisma = new PrismaClient();
 
 const routes: Route[] = [
   {
-    path: "/",
+    path: "/signup",
     method: RequestMethod.POST,
-    requestHandler: (req, res, next) => {
-      validateSignUp(req, res, (err?: any) => {
-        if (err) return next(err);
+    requestHandler: async (req, res, next) => {
+      try {
+        // Validate form fields
+        validateSignUp(req, res, (err?: any) => {
+          if (err) return next(err);
+        });
 
-        console.log("📩 Received body:", req.body);
-        res.json({ youSent: req.body });
-      });
+        // Verify reCAPTCHA
+        const { recaptchaToken, firstName, lastName, email, password } =
+          req.body;
+
+        const recaptchaOk = await verifyRecaptcha({
+          projectID: process.env.GCP_PROJECT_ID!,
+          recaptchaKey: process.env.RECAPTCHA_SITE_KEY!,
+          token: recaptchaToken,
+          expectedAction: ExpectedAction.SignUp,
+        });
+
+        if (!recaptchaOk) {
+          return res.status(400).json({ error: "Invalid reCAPTCHA token" });
+        }
+
+        // Create user in the database (Prisma example)
+        const user = await prisma.user.create({
+          data: { firstName, lastName, email, passwordHash: password },
+        });
+
+        res.json({ user });
+      } catch (err) {
+        next(err);
+      }
     },
   },
 ];

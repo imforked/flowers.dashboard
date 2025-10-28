@@ -16,10 +16,8 @@ export const routes: Route[] = [
     method: RequestMethod.POST,
     requestHandler: async (req, res, next) => {
       try {
-        // Validate form fields
-        validateSignUp(req, res, (err?: any) => {
-          if (err) return next(err);
-        });
+        const validationError = validateSignUp(req, res);
+        if (validationError) return;
 
         // Verify reCAPTCHA
         const { recaptchaToken, firstName, lastName, email, password } =
@@ -39,14 +37,20 @@ export const routes: Route[] = [
         const saltRounds = 10;
         const passwordHash = await bcrypt.hash(password, saltRounds);
 
-        // Create user in the database
+        const normalizedEmail = email.trim().toLowerCase();
+
         const user = await prisma.user.create({
-          data: { firstName, lastName, email, passwordHash },
+          data: { firstName, lastName, email: normalizedEmail, passwordHash },
         });
 
-        res.json({ user });
-      } catch (err) {
-        next(err);
+        // Remove hashed password from client
+        const { passwordHash: _, ...userSafe } = user;
+        res.json({ user: userSafe });
+      } catch (err: any) {
+        if (err.code === "P2002" && err.meta?.target?.includes("email")) {
+          return res.status(400).json({ error: "Email already in use" });
+        }
+        throw err;
       }
     },
   },

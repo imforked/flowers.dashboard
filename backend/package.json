@@ -12,7 +12,7 @@
     "start": "node dist/index.js"
   },
   "dependencies": {
-    "@imforked/legos": "0.0.33",
+    "@imforked/legos": "0.0.41",
     "@prisma/client": "^6.18.0",
     "bcrypt": "^6.0.0",
     "express": "^5.1.0",

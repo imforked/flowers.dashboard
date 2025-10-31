@@ -21,11 +21,10 @@ function App() {
   //   fetchData();
   // }, []);
 
-
   return (
     <SignUp
-      action={BACKEND_URL}
-      recaptchaSiteKey="6LclFO4rAAAAAFsnQqD1HrwAqO1rHhdl08Z-Ficd"
+      action={`${BACKEND_URL}/signup`}
+      recaptchaSiteKey="6LenrPwrAAAAAEOYEyIjgn_zRCa-F56BwmuUdS1m"
     />
   );
 }

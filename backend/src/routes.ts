@@ -23,6 +23,8 @@ export const routes: Route[] = [
         const { recaptchaToken, firstName, lastName, email, password } =
           req.body;
 
+        console.log("Received signup request:", req.body);
+
         const recaptchaOk = await verifyRecaptcha({
           projectID: process.env.GCP_PROJECT_ID!,
           recaptchaKey: process.env.RECAPTCHA_SITE_KEY!,
@@ -41,6 +43,12 @@ export const routes: Route[] = [
 
         const user = await prisma.user.create({
           data: { firstName, lastName, email: normalizedEmail, passwordHash },
+        });
+
+        console.log("✅ New user created:", {
+          id: user.id,
+          email: user.email,
+          createdAt: user.createdAt,
         });
 
         // Remove hashed password from client

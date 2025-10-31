@@ -1,10 +1,14 @@
 import "./App.css";
 import { SignUp } from "@imforked/legos";
 
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
 function App() {
   return (
     <SignUp
-      action="http://localhost:4000" recaptchaSiteKey="6LclFO4rAAAAAFsnQqD1HrwAqO1rHhdl08Z-Ficd" />
+      action={`${BACKEND_URL}/signup`}
+      recaptchaSiteKey="6LenrPwrAAAAAEOYEyIjgn_zRCa-F56BwmuUdS1m"
+    />
   );
 }
 

@@ -7,8 +7,13 @@ export const VoiceRecorder = () => {
   const [lastClickedButton, setLastClickedButton] =
     useState<ButtonControl | null>(null);
 
-  const { status, startRecording, stopRecording, mediaBlobUrl } =
-    useReactMediaRecorder({ audio: true });
+  const {
+    status,
+    startRecording,
+    stopRecording,
+    mediaBlobUrl,
+    clearBlobUrl: reactMediaRecorderClearBlobUrl,
+  } = useReactMediaRecorder({ audio: true });
 
   const audioPlayerRef = useRef<HTMLAudioElement>(null);
 
@@ -21,6 +26,11 @@ export const VoiceRecorder = () => {
   const clickHandlerStopButton = () => {
     setLastClickedButton(ButtonControl.Stop);
     stopRecording();
+  };
+
+  const clearBlobUrl = () => {
+    reactMediaRecorderClearBlobUrl();
+    audioPlayerRef.current?.load();
   };
 
   return (
@@ -49,7 +59,9 @@ export const VoiceRecorder = () => {
       />
       {mediaBlobUrl && (
         <>
-          <S.Button $customColor="#c94b4b">Delete</S.Button>
+          <S.Button $customColor="#c94b4b" onClick={clearBlobUrl}>
+            Delete
+          </S.Button>
           <S.Button $customColor="#4bc96c">Submit</S.Button>
         </>
       )}

@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import styled, { css } from "styled-components";
 
 export const Container = styled.div`
@@ -20,7 +21,10 @@ export const Status = styled.p<{ $isVisible: boolean }>`
     `}
 `;
 
-export const Button = styled.button<{ $isLastClicked?: boolean }>`
+export const Button = styled.button<{
+  $isLastClicked?: boolean;
+  $customColor?: CSSProperties["color"];
+}>`
   font-size: 30px;
   padding: 3px 18px;
   text-transform: capitalize;
@@ -31,6 +35,13 @@ export const Button = styled.button<{ $isLastClicked?: boolean }>`
     $isLastClicked &&
     css`
       background: #222222ff;
+    `}
+
+  ${({ $customColor }) =>
+    $customColor &&
+    css`
+      border: ${$customColor};
+      background: ${$customColor};
     `}
 `;
 

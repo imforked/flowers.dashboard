@@ -47,7 +47,12 @@ export const VoiceRecorder = () => {
         autoPlay
         loop
       />
-      {mediaBlobUrl && <S.Button>Submit</S.Button>}
+      {mediaBlobUrl && (
+        <>
+          <S.Button $customColor="#c94b4b">Delete</S.Button>
+          <S.Button $customColor="#4bc96c">Submit</S.Button>
+        </>
+      )}
     </S.Container>
   );
 };

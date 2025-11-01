@@ -7,10 +7,10 @@ export const VoiceRecorder = () => {
 
   return (
     <S.Container>
-      <S.Status $isVisible={status !== "idle"}>{status} RECORDING</S.Status>
+      <S.Status $isVisible={status !== "idle"}>{status}</S.Status>
       <S.ButtonContainer>
-        <S.StartButton onClick={startRecording}>Start</S.StartButton>
-        <S.StopButton onClick={stopRecording}>Stop</S.StopButton>
+        <S.Button onClick={startRecording}>Start</S.Button>
+        <S.Button onClick={stopRecording}>Stop</S.Button>
       </S.ButtonContainer>
       <S.AudioPlayback src={mediaBlobUrl} controls autoPlay loop />
     </S.Container>

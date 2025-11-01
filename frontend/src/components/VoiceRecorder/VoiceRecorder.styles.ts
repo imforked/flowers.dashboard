@@ -20,9 +20,18 @@ export const Status = styled.p<{ $isVisible: boolean }>`
     `}
 `;
 
-export const Button = styled.button`
+export const Button = styled.button<{ $isLastClicked?: boolean }>`
   font-size: 30px;
   padding: 3px 18px;
+  text-transform: capitalize;
+  border: 3px solid #6b6b6bff;
+  transition: background 0.2s ease-in-out;
+
+  ${({ $isLastClicked }) =>
+    $isLastClicked &&
+    css`
+      background: #222222ff;
+    `}
 `;
 
 export const ButtonContainer = styled.div`

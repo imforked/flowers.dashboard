@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
 import styled, { css } from "styled-components";
+import { Button as ButtonBase } from "@imforked/legos";
 
 export const Container = styled.div`
   display: flex;
@@ -21,7 +22,7 @@ export const Status = styled.p<{ $isVisible: boolean }>`
     `}
 `;
 
-export const Button = styled.button<{
+export const Button = styled(ButtonBase)<{
   $isLastClicked?: boolean;
   $customColor?: CSSProperties["color"];
 }>`
@@ -29,12 +30,13 @@ export const Button = styled.button<{
   padding: 3px 18px;
   text-transform: capitalize;
   border: 3px solid #6b6b6bff;
-  transition: background 0.2s ease-in-out;
+  transition: background 0.1s ease-in-out;
+  background: transparent;
 
   ${({ $isLastClicked }) =>
     $isLastClicked &&
     css`
-      background: #222222ff;
+      background: #191919ff;
     `}
 
   ${({ $customColor }) =>

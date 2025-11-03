@@ -31,6 +31,7 @@ export const VoiceRecorder = () => {
   const clearBlobUrl = () => {
     reactMediaRecorderClearBlobUrl();
     audioPlayerRef.current?.load();
+    setLastClickedButton(null);
   };
 
   return (
@@ -39,16 +40,14 @@ export const VoiceRecorder = () => {
       <S.ButtonContainer>
         <S.Button
           $isLastClicked={lastClickedButton === ButtonControl.Start}
+          text={ButtonControl.Start}
           onClick={clickHandlerStartButton}
-        >
-          {ButtonControl.Start}
-        </S.Button>
+        />
         <S.Button
           $isLastClicked={lastClickedButton === ButtonControl.Stop}
+          text={ButtonControl.Stop}
           onClick={clickHandlerStopButton}
-        >
-          {ButtonControl.Stop}
-        </S.Button>
+        />
       </S.ButtonContainer>
       <S.AudioPlayback
         ref={audioPlayerRef}
@@ -59,10 +58,12 @@ export const VoiceRecorder = () => {
       />
       {mediaBlobUrl && (
         <>
-          <S.Button $customColor="#c94b4b" onClick={clearBlobUrl}>
-            Delete
-          </S.Button>
-          <S.Button $customColor="#4bc96c">Submit</S.Button>
+          <S.Button
+            $customColor="#c94b4b"
+            text="Delete"
+            onClick={clearBlobUrl}
+          />
+          <S.Button $customColor="#4bc96c" text="Submit" />
         </>
       )}
     </S.Container>

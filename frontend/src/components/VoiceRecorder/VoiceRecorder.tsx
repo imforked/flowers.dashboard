@@ -13,7 +13,10 @@ export const VoiceRecorder = () => {
     stopRecording,
     mediaBlobUrl,
     clearBlobUrl: reactMediaRecorderClearBlobUrl,
-  } = useReactMediaRecorder({ audio: true });
+  } = useReactMediaRecorder({
+    audio: true,
+    blobPropertyBag: { type: "audio/wav" },
+  });
 
   const audioPlayerRef = useRef<HTMLAudioElement>(null);
 
@@ -32,6 +35,28 @@ export const VoiceRecorder = () => {
     reactMediaRecorderClearBlobUrl();
     audioPlayerRef.current?.load();
     setLastClickedButton(null);
+  };
+
+  const submitRecording = async () => {
+    if (!mediaBlobUrl) return;
+
+    try {
+      const blob = await fetch(mesdiaBlobUrl).then((res) => res.blob());
+
+      const response = await fetch("/api/messages", {
+        method: "POST",
+        headers: {
+          "Content-Type": "audio/wav",
+        },
+        body: blob,
+      });
+
+      if (!response.ok) throw new Error("Upload failed");
+
+      console.log("Upload successful!");
+    } catch (err) {
+      console.error("Error uploading recording:", err);
+    }
   };
 
   return (
@@ -63,7 +88,11 @@ export const VoiceRecorder = () => {
             text="Delete"
             onClick={clearBlobUrl}
           />
-          <S.Button $customColor="#4bc96c" text="Submit" />
+          <S.Button
+            $customColor="#4bc96c"
+            text="Submit"
+            onClick={submitRecording}
+          />
         </>
       )}
     </S.Container>

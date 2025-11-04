@@ -9,7 +9,7 @@ const app = createServer({
     // JSON middleware for normal routes
     express.json(),
     // `.raw` middleware only for audio/wav requests
-    express.raw({ type: "audio/wav", limit: "10mb" }),
+    express.raw({ type: "audio/wav", limit: "20mb" }),
   ],
   routes,
   onError: (err) => {

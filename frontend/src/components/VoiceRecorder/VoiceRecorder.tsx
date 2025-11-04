@@ -41,7 +41,7 @@ export const VoiceRecorder = () => {
     if (!mediaBlobUrl) return;
 
     try {
-      const blob = await fetch(mesdiaBlobUrl).then((res) => res.blob());
+      const blob = await fetch(mediaBlobUrl).then((res) => res.blob());
 
       const response = await fetch("/api/messages", {
         method: "POST",

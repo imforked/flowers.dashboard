@@ -43,13 +43,16 @@ export const VoiceRecorder = () => {
     try {
       const blob = await fetch(mediaBlobUrl).then((res) => res.blob());
 
-      const response = await fetch("/api/messages", {
-        method: "POST",
-        headers: {
-          "Content-Type": "audio/wav",
-        },
-        body: blob,
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/api/messages`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "audio/wav",
+          },
+          body: blob,
+        }
+      );
 
       if (!response.ok) throw new Error("Upload failed");
 

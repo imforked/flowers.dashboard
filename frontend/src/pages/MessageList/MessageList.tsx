@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
+import type { Message } from "./MessageList.types";
 
 export const MessageList = () => {
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState<Message[]>([]);
 
   const getMessages = async () => {
     const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/messages`);
@@ -12,6 +13,8 @@ export const MessageList = () => {
   useEffect(() => {
     getMessages().then(setMessages);
   }, []);
+
+  console.log(messages);
 
   return (
     <div>

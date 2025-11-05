@@ -1,12 +1,9 @@
-import {
-  Route,
-  RequestMethod,
-} from "@imforked/legos/server";
+import { Route as RouteType, RequestMethod } from "@imforked/legos/server";
 import { PrismaClient } from "./generated/prisma/index.js";
 
 const prisma = new PrismaClient();
 
-export const routes: Route[] = [
+export const routes: RouteType[] = [
   {
     path: "/api/messages",
     method: RequestMethod.POST,
@@ -34,6 +31,26 @@ export const routes: Route[] = [
       } catch (err) {
         console.error(err);
         res.status(500).json({ error: "Internal server error" });
+      }
+    },
+  },
+  {
+    path: `/api/messages`,
+    method: RequestMethod.GET,
+    requestHandler: async (req, res) => {
+      try {
+        const messages = await prisma.message.findMany();
+
+        const encodedMessages = messages.map((message) => ({
+          id: message.id,
+          createdAt: message.createdAt,
+          audioData: Buffer.from(message.audioData).toString("base64"),
+        }));
+
+        res.json(encodedMessages);
+      } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Failed to fetch messages" });
       }
     },
   },

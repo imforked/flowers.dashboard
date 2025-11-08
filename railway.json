@@ -1,0 +1,7 @@
+{
+  "build": {
+    "builder": "NIXPACKS",
+    "buildCommand": "npm install --prefix backend",
+    "startCommand": "npm start --prefix backend"
+  }
+}

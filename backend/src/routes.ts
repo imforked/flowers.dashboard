@@ -1,5 +1,5 @@
 import { Route as RouteType, RequestMethod } from "@imforked/legos/server";
-import { PrismaClient } from "./generated/prisma/index.js";
+import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 

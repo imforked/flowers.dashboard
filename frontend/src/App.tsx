@@ -1,8 +1,9 @@
+
 import "./App.css";
-import { VoiceRecorder } from "./components/VoiceRecorder/VoiceRecorder";
+import { SubmitMessage } from "./pages/SubmitMessage/SubmitMessage";
 
 function App() {
-  return <VoiceRecorder />;
+  return <SubmitMessage />;
 }
 
 export default App;

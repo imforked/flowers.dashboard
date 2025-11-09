@@ -54,4 +54,22 @@ export const routes: RouteType[] = [
       }
     },
   },
+  {
+    path: "/api/messages/latest",
+    method: RequestMethod.GET,
+    requestHandler: async (req, res) => {
+      try {
+        const latestMessage = await prisma.message.findFirst({
+          orderBy: {
+            createdAt: "desc",
+          },
+        });
+
+        res.json(latestMessage);
+      } catch (err) {
+        console.log(err);
+        res.status(500).json({ error: "Failed to fetch the latest message" });
+      }
+    },
+  },
 ];

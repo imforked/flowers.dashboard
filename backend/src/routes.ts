@@ -65,9 +65,21 @@ export const routes: RouteType[] = [
           },
         });
 
-        res.json(latestMessage);
+        if (!latestMessage) {
+          return res
+            .status(500)
+            .json({ error: "Failed to fetch the latest message" });
+        }
+
+        const encodedMessage = {
+          id: latestMessage.id,
+          createdAt: latestMessage.createdAt,
+          audioData: Buffer.from(latestMessage.audioData).toString("base64"),
+        };
+
+        res.json(encodedMessage);
       } catch (err) {
-        console.log(err);
+        console.error("Error fetching latest message:", err);
         res.status(500).json({ error: "Failed to fetch the latest message" });
       }
     },

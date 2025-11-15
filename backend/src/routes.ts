@@ -84,27 +84,4 @@ export const routes: RouteType[] = [
       }
     },
   },
-  {
-    path: "/api/messages/unheard",
-    method: RequestMethod.GET,
-    requestHandler: async (req, res) => {
-      try {
-        const unheardMessages = await prisma.message.findMany({
-          where: { isHeard: false },
-          orderBy: { createdAt: "asc" },
-        });
-
-        const encodedMessages = unheardMessages.map((message) => ({
-          id: message.id,
-          createdAt: message.createdAt,
-          audioData: Buffer.from(message.audioData).toString("base64"),
-        }));
-
-        res.json(encodedMessages);
-      } catch (err) {
-        console.error("Error fetching unheard messages:", err);
-        res.status(500).json({ error: "Failed to fetch unheard messages" });
-      }
-    },
-  },
 ];

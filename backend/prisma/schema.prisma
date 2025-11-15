@@ -11,5 +11,4 @@ model Message {
   id         String   @id @default(uuid())
   audioData  Bytes
   createdAt  DateTime @default(now())
-  isHeard    Boolean  @default(false)
 }

@@ -3,6 +3,12 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
+const PI_URL = process.env.PI_URL;
+
+if (!PI_URL) {
+  throw new Error("PI_URL is not defined in environment variables");
+}
+
 export const routes: RouteType[] = [
   {
     path: "/api/messages",
@@ -23,9 +29,31 @@ export const routes: RouteType[] = [
 
         const audioData = new Uint8Array(req.body);
 
+        // Save message to the PostgreSQL database
         const message = await prisma.message.create({
           data: { audioData },
         });
+
+        // WEBHOOK LOGIC
+        // POST message to the Pi
+        (async () => {
+          try {
+            await fetch(`${PI_URL}/new-message`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                id: message.id,
+                createdAt: message.createdAt,
+                audioData: Buffer.from(audioData).toString("base64"),
+              }),
+            });
+            console.log(
+              `Message with id of "${message.id}" has been posted to the Pi`
+            );
+          } catch (webhookErr) {
+            console.error(`Failed to send message to the Pi: ${webhookErr}`);
+          }
+        })();
 
         res.status(201).json({ id: message.id });
       } catch (err) {

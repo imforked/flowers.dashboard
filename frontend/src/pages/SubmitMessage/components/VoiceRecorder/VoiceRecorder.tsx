@@ -1,9 +1,12 @@
 import { useRef, useState } from "react";
 import * as S from "./VoiceRecorder.styles";
 import { useReactMediaRecorder } from "react-media-recorder";
-import { ButtonControl } from "./VoiceRecorder.types";
+import { ButtonControl, type VoiceRecorderProps } from "./VoiceRecorder.types";
 
-export const VoiceRecorder = () => {
+export const VoiceRecorder = ({
+  setErrorMessage,
+  setHasBeenSubmitted,
+}: VoiceRecorderProps) => {
   const [lastClickedButton, setLastClickedButton] =
     useState<ButtonControl | null>(null);
 
@@ -57,8 +60,11 @@ export const VoiceRecorder = () => {
       if (!response.ok) throw new Error("Upload failed");
 
       console.log("Upload successful!");
+      setHasBeenSubmitted(true);
     } catch (err) {
       console.error("Error uploading recording:", err);
+      setHasBeenSubmitted(true);
+      setErrorMessage(String(err));
     }
   };
 

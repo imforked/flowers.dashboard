@@ -105,13 +105,15 @@ export const VoiceRecorder = ({
       )}
 
       {!recordingExists && <S.Button {...recordingButtonValues} />}
-      <S.AudioPlayback
-        ref={audioPlayerRef}
-        src={mediaBlobUrl}
-        controls
-        autoPlay
-        loop
-      />
+      {recordingExists && (
+        <S.AudioPlayback
+          ref={audioPlayerRef}
+          src={mediaBlobUrl}
+          controls
+          autoPlay
+          loop
+        />
+      )}
     </S.Container>
   );
 };

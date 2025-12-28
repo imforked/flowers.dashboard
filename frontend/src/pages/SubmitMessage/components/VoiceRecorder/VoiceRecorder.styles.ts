@@ -9,17 +9,9 @@ export const Container = styled.div`
   gap: 16px;
 `;
 
-export const Status = styled.p<{ $isVisible: boolean }>`
+export const Guidance = styled.p`
   margin: 0;
-  text-transform: uppercase;
-  opacity: 0;
   font-size: 30px;
-
-  ${({ $isVisible }) =>
-    $isVisible &&
-    css`
-      opacity: 1;
-    `}
 `;
 
 export const Button = styled(ButtonBase)<{
@@ -41,3 +33,8 @@ export const Button = styled(ButtonBase)<{
 `;
 
 export const AudioPlayback = styled.audio``;
+
+export const DeleteSubmitButtonsContainer = styled.div`
+  display: flex;
+  gap: 0 20px;
+`;

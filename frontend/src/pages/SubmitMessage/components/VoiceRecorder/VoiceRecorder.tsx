@@ -11,7 +11,6 @@ export const VoiceRecorder = ({
     useState<ButtonControl | null>(null);
 
   const {
-    status,
     startRecording,
     stopRecording,
     mediaBlobUrl,
@@ -25,6 +24,8 @@ export const VoiceRecorder = ({
 
   const displayStartButton =
     lastClickedButton === null || lastClickedButton === ButtonControl.Stop;
+
+  const recordingExists = Boolean(mediaBlobUrl);
 
   const clickHandlerStartRecording = () => {
     audioPlayerRef.current?.pause();
@@ -80,17 +81,16 @@ export const VoiceRecorder = ({
 
   return (
     <S.Container>
-      <S.Status $isVisible={status !== "idle"}>{status}</S.Status>
-      <S.Button {...recordingButtonValues} />
-      <S.AudioPlayback
-        ref={audioPlayerRef}
-        src={mediaBlobUrl}
-        controls
-        autoPlay
-        loop
-      />
-      {mediaBlobUrl && (
-        <>
+      {!recordingExists && (
+        <S.Guidance>
+          {displayStartButton
+            ? "Start recording when ready."
+            : "Stop recording when finished."}
+        </S.Guidance>
+      )}
+
+      {recordingExists && (
+        <S.DeleteSubmitButtonsContainer>
           <S.Button
             $customColor="#c94b4b"
             text="Delete"
@@ -101,8 +101,17 @@ export const VoiceRecorder = ({
             text="Submit"
             onClick={submitRecording}
           />
-        </>
+        </S.DeleteSubmitButtonsContainer>
       )}
+
+      {!recordingExists && <S.Button {...recordingButtonValues} />}
+      <S.AudioPlayback
+        ref={audioPlayerRef}
+        src={mediaBlobUrl}
+        controls
+        autoPlay
+        loop
+      />
     </S.Container>
   );
 };

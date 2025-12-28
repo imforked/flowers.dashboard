@@ -23,16 +23,26 @@ export const VoiceRecorder = ({
 
   const audioPlayerRef = useRef<HTMLAudioElement>(null);
 
-  const clickHandlerStartButton = () => {
+  const displayStartButton =
+    lastClickedButton === null || lastClickedButton === ButtonControl.Stop;
+
+  const clickHandlerStartRecording = () => {
     audioPlayerRef.current?.pause();
     setLastClickedButton(ButtonControl.Start);
     startRecording();
   };
 
-  const clickHandlerStopButton = () => {
+  const clickHandlerStopRecording = () => {
     setLastClickedButton(ButtonControl.Stop);
     stopRecording();
   };
+
+  const recordingButtonValues: {
+    text: ButtonControl;
+    onClick: () => void;
+  } = displayStartButton
+    ? { text: ButtonControl.Start, onClick: clickHandlerStartRecording }
+    : { text: ButtonControl.Stop, onClick: clickHandlerStopRecording };
 
   const clearBlobUrl = () => {
     reactMediaRecorderClearBlobUrl();
@@ -71,18 +81,7 @@ export const VoiceRecorder = ({
   return (
     <S.Container>
       <S.Status $isVisible={status !== "idle"}>{status}</S.Status>
-      <S.ButtonContainer>
-        <S.Button
-          $isLastClicked={lastClickedButton === ButtonControl.Start}
-          text={ButtonControl.Start}
-          onClick={clickHandlerStartButton}
-        />
-        <S.Button
-          $isLastClicked={lastClickedButton === ButtonControl.Stop}
-          text={ButtonControl.Stop}
-          onClick={clickHandlerStopButton}
-        />
-      </S.ButtonContainer>
+      <S.Button {...recordingButtonValues} />
       <S.AudioPlayback
         ref={audioPlayerRef}
         src={mediaBlobUrl}

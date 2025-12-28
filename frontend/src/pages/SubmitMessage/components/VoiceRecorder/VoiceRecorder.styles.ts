@@ -23,7 +23,6 @@ export const Status = styled.p<{ $isVisible: boolean }>`
 `;
 
 export const Button = styled(ButtonBase)<{
-  $isLastClicked?: boolean;
   $customColor?: CSSProperties["color"];
 }>`
   font-size: 30px;
@@ -33,23 +32,12 @@ export const Button = styled(ButtonBase)<{
   transition: background 0.1s ease-in-out;
   background: transparent;
 
-  ${({ $isLastClicked }) =>
-    $isLastClicked &&
-    css`
-      background: #191919ff;
-    `}
-
   ${({ $customColor }) =>
     $customColor &&
     css`
       border: ${$customColor};
       background: ${$customColor};
     `}
-`;
-
-export const ButtonContainer = styled.div`
-  display: flex;
-  gap: 16px;
 `;
 
 export const AudioPlayback = styled.audio``;

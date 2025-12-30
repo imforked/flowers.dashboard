@@ -17,7 +17,7 @@
     "prisma:generate:deploy": "prisma generate --schema ./prisma/schema.prisma"
   },
   "dependencies": {
-    "@imforked/legos": "1.0.1",
+    "@imforked/legos": "1.1.0",
     "@prisma/client": "^6.18.0",
     "express": "^5.1.0",
     "zod": "^4.1.8"

@@ -6,6 +6,7 @@ export const Container = styled.div`
   align-items: center;
   justify-content: center;
   height: 100%;
+  gap: 20px 0;
 `;
 
 export const Description = styled.span``;

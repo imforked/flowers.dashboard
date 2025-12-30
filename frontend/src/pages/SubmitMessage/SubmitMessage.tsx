@@ -33,7 +33,7 @@ export const SubmitMessage = () => {
     <Fragment>
       <Modal
         isOpen={isModalOpen}
-        setIsOpen={setIsModalOpen}
+        setIsOpen={() => {}}
         content={<MicModalContent setIsModalOpen={setIsModalOpen} />}
       />
 

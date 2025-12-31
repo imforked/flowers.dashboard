@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import * as S from "./VoiceRecorder.styles";
 import { useReactMediaRecorder } from "react-media-recorder";
 import { ButtonControl, type VoiceRecorderProps } from "./VoiceRecorder.types";
+import { Countdown, COUNTDOWN_STARTING_NUMBER } from "../Countdown/Countdown";
 
 export const VoiceRecorder = ({
   setErrorMessage,
@@ -9,6 +10,7 @@ export const VoiceRecorder = ({
 }: VoiceRecorderProps) => {
   const [lastClickedButton, setLastClickedButton] =
     useState<ButtonControl | null>(null);
+  const [countdownIsActive, setCountdownIsActive] = useState(false);
 
   const {
     startRecording,
@@ -28,9 +30,15 @@ export const VoiceRecorder = ({
   const recordingExists = Boolean(mediaBlobUrl);
 
   const clickHandlerStartRecording = () => {
+    const ACCOUNT_FOR_GO_COPY = 1;
     audioPlayerRef.current?.pause();
     setLastClickedButton(ButtonControl.Start);
-    startRecording();
+    setCountdownIsActive(true);
+
+    setTimeout(() => {
+      setCountdownIsActive(false);
+      startRecording();
+    }, (COUNTDOWN_STARTING_NUMBER + ACCOUNT_FOR_GO_COPY) * 1000);
   };
 
   const clickHandlerStopRecording = () => {
@@ -81,38 +89,43 @@ export const VoiceRecorder = ({
 
   return (
     <S.Container>
-      {!recordingExists && (
-        <S.Guidance>
-          {displayStartButton
-            ? "Start recording when ready."
-            : "Stop recording when finished."}
-        </S.Guidance>
-      )}
+      {lastClickedButton === ButtonControl.Start && <Countdown />}
+      {!countdownIsActive && (
+        <S.VoiceInterfaceContainer>
+          {!recordingExists && (
+            <S.Guidance>
+              {displayStartButton
+                ? "Start recording when ready."
+                : "Stop recording when finished."}
+            </S.Guidance>
+          )}
 
-      {recordingExists && (
-        <S.DeleteSubmitButtonsContainer>
-          <S.Button
-            $customColor="#c94b4b"
-            text="Delete"
-            onClick={clearBlobUrl}
-          />
-          <S.Button
-            $customColor="#4bc96c"
-            text="Submit"
-            onClick={submitRecording}
-          />
-        </S.DeleteSubmitButtonsContainer>
-      )}
+          {recordingExists && (
+            <S.DeleteSubmitButtonsContainer>
+              <S.Button
+                $customColor="#c94b4b"
+                text="Delete"
+                onClick={clearBlobUrl}
+              />
+              <S.Button
+                $customColor="#4bc96c"
+                text="Submit"
+                onClick={submitRecording}
+              />
+            </S.DeleteSubmitButtonsContainer>
+          )}
 
-      {!recordingExists && <S.Button {...recordingButtonValues} />}
-      {recordingExists && (
-        <S.AudioPlayback
-          ref={audioPlayerRef}
-          src={mediaBlobUrl}
-          controls
-          autoPlay
-          loop
-        />
+          {!recordingExists && <S.Button {...recordingButtonValues} />}
+          {recordingExists && (
+            <S.AudioPlayback
+              ref={audioPlayerRef}
+              src={mediaBlobUrl}
+              controls
+              autoPlay
+              loop
+            />
+          )}
+        </S.VoiceInterfaceContainer>
       )}
     </S.Container>
   );

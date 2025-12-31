@@ -3,6 +3,7 @@ import { SuccessState } from "../../__components/SuccessState/SuccessState";
 import { ErrorState } from "../../__components/ErrorState/ErrorState";
 import { Modal } from "@imforked/legos";
 import { Fragment, useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { useMicPermission } from "../../hooks/useMicPermission";
 import { MicModalContent } from "./components/MicModalContent/MicModalContent";
 
@@ -31,12 +32,14 @@ export const SubmitMessage = () => {
 
   return (
     <Fragment>
-      <Modal
-        isOpen={isModalOpen}
-        setIsOpen={() => {}}
-        content={<MicModalContent setIsModalOpen={setIsModalOpen} />}
-      />
-
+      {createPortal(
+        <Modal
+          isOpen={isModalOpen}
+          setIsOpen={() => {}}
+          content={<MicModalContent setIsModalOpen={setIsModalOpen} />}
+        />,
+        document.body
+      )}
       {hasBeenSubmitted ? (
         submitStatus
       ) : (
